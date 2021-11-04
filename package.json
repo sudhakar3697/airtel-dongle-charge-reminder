@@ -1,0 +1,12 @@
+{
+  "name": "airtel-dongle-charge-reminder",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "dependencies": {
+    "node-notifier": "^10.0.0",
+    "puppeteer-core": "^11.0.0"
+  }
+}
