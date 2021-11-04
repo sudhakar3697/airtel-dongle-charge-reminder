@@ -1,4 +1,5 @@
 const path = require('path');
+const readline = require('readline');
 const puppeteer = require('puppeteer-core');
 const notifier = require('node-notifier');
 
@@ -20,10 +21,15 @@ async function check() {
     const page = await browser.newPage();
     await page.goto(airtelDongleWebUrl);
 
-    const bat = await page.evaluate((variable) => window[variable], 'batt_p');
-    let isCharging = await page.evaluate((variable) => window[variable], 'flag_battery');
-    isCharging = isCharging === 4 ? true : false
-    console.log('Battery:', bat, 'Charging: ', isCharging);
+    const { bat, isCharging } = await page.evaluate(() => {
+        return {
+            bat: window['batt_p'],
+            isCharging: window['flag_battery'] === 4 ? true : false
+        }
+    })
+    readline.clearLine(process.stdout, 0);
+    readline.cursorTo(process.stdout, 0);
+    process.stdout.write(`${new Date().toLocaleString()} Battery: ${bat}%  Charging: ${isCharging}`);
     if (!isCharging)
         warn(bat);
     await browser.close();
